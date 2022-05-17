@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Stagiaire;
 use App\Models\Test;
 use App\Models\TestsQuestion;
+use App\Models\QuestionsReponse;
 
 class QuestionController extends Controller
 {
@@ -35,7 +36,7 @@ class QuestionController extends Controller
         if ($testQuestions) {
 
             $questions = array();
-            foreach($testQuestions as $testQuestion){
+            foreach ($testQuestions as $testQuestion) {
                 $question = Question::find($testQuestion->question_id);
                 array_push($questions, $question);
             }
@@ -52,6 +53,39 @@ class QuestionController extends Controller
             );
         }
     }
+
+    public function getQuestionsByTest($id_test)
+    {
+        $testQuestions = TestsQuestion::where('test_id', $id_test)->get();
+        if ($testQuestions) {
+
+            $questions = array();
+            foreach ($testQuestions as $testQuestion) {
+                $reponses = QuestionsReponse::where('question_id', $testQuestion->question_id)->get();
+                $question = Question::find($testQuestion->question_id);
+                $reponsess = array();
+                foreach ($reponses as $rep) {
+                    $reponse = Reponse::find($rep->reponse_id);
+                    array_push($reponsess, $reponse);
+                }
+                $question->réponses = $reponsess;
+                array_push($questions, $question);
+            }
+            return   response()->json([
+                'questions' => $questions,
+                'status' => 200,
+            ]);
+        } else {
+            return response()->json(
+                [
+                    'validation_errors' => 'test non trouvée', //$validator->messages()
+                    'status' => 404,
+                ]
+            );
+        }
+    }
+
+
 
     public function show($id)
     {

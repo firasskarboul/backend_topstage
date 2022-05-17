@@ -11,11 +11,6 @@ use Jenssegers\Mongodb\Eloquent\Model as EloquentModel;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-
-
-//Relation
-use App\Models\Stagiaire;
-
 use App\Notifications\ResetPasswordNotification;
 
 class Stagiaire extends EloquentModel
@@ -25,6 +20,7 @@ class Stagiaire extends EloquentModel
 
 
     protected $fillable = [
+        '_id',
         'name',
         'prenom',
         'datenaissance',
@@ -37,25 +33,25 @@ class Stagiaire extends EloquentModel
         'adresse',
         'telephone',
         'password',
+        'score',
 
-     
-         //Relation
-         'demandesStages',
+        //Relation
+        'demandesStages',
 
-         //Relation
-         'travaux',
-       
-       
-        
+        //Relation
+        'travaux',
+
+
+
     ];
 
     //Relation
-    public static function demandeStages(){
+    public static function demandeStages()
+    {
         //return $this->embedsMany(DemandeStage::class);
         return $this->embedsMany(DemandeStage::class);
-        
-     } 
-  
+    }
+
 
 
     /**
@@ -77,8 +73,8 @@ class Stagiaire extends EloquentModel
         'email_verified_at' => 'datetime',
     ];
 
-    
-    
+
+
     public function sendPasswordResetNotification($token)
     {
         //https://spa.test   $url = 'http://localhost:3000/U-reset?token=' . $token;
@@ -87,4 +83,3 @@ class Stagiaire extends EloquentModel
         $this->notify(new ResetPasswordNotification($url));
     }
 }
-

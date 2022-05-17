@@ -30,9 +30,15 @@ class TestController extends Controller
         ]);
     }
 
-    public function random()
+    public function random($niveau_stagiaire)
     {
-        $req = Test::all();
+        if ($niveau_stagiaire == 'Licence')
+            $req = Test::where('niveautest', 'moyen')->get();
+        else if ($niveau_stagiaire == 'BTS' || $niveau_stagiaire == 'bac')
+            $req = Test::where('niveautest', 'facile')->get();
+        else
+            $req = Test::where('niveautest', 'difficile')->get();
+
         $req = $req->random(1);
 
         $sum = $req->pluck('time');

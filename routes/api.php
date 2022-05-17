@@ -110,6 +110,7 @@ Route::post('register', [AuthController::class, 'register']);
 //Stagiaire
 Route::post('/register-stagiaire', [AuthControllerStagiaire::class, 'register']);
 Route::post('/login-stagiaire', [AuthControllerStagiaire::class, 'login']);
+Route::put('submit-score/{id}', [AuthControllerStagiaire::class, 'submit_score']);
 
 
 /* 
@@ -277,6 +278,7 @@ Route::put('/question/{id}', [QuestionController::class, 'update']);
 Route::post('question', [QuestionController::class, 'store']);
 Route::get('/question/{question}', [QuestionController::class, 'search']);
 Route::get('/questionTest/{id_test}', [QuestionController::class, 'showByTest']);
+Route::get('/questions/{id_test}', [QuestionController::class, 'getQuestionsByTest']);
 
 //réponses
 Route::get('/reponse', [ReponseController::class, 'index']);
@@ -289,10 +291,10 @@ Route::post('reponse', [ReponseController::class, 'store']);
 //test
 Route::post('test', [TestController::class, 'store']);
 Route::get('/test', [TestController::class, 'index']);
-Route::get('/randomTest', [TestController::class, 'random']);
+Route::get('/randomTest/{niveau_stagiaire}', [TestController::class, 'random']);
 
 
-Route::post('identifier/stage', [AuthControllerStagiaire::class, ' identifier']);
+Route::post('identifier/stage', [AuthControllerStagiaire::class, 'identifier']);
 //calendrier
 Route::get('events', [EventController::class, 'index']);
 Route::delete('event/{id}', [EventController::class, 'destroy']);

@@ -16,9 +16,6 @@ use Jenssegers\Mongodb\Eloquent\Model;
 class AuthControllerStagiaire extends Controller
 {
 
-
-
-
     //Read All
     public function index()
     {
@@ -29,13 +26,10 @@ class AuthControllerStagiaire extends Controller
         ]);
     }
 
-
     //register stagiaire
 
     public function register(Request $request)
     {
-
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3|max:20',
             'prenom' => 'required|string|min:3|max:20',
@@ -48,9 +42,7 @@ class AuthControllerStagiaire extends Controller
             //'passport'=> 'digits:11|unique:stagiaires,passport',
             'niveauetude' => 'required|string',
             'specialite' => 'required|string',
-            'filiere' => 'required|string',
-
-
+            'filiere' => 'required|string'
         ]);
 
         if ($validator->fails()) {
@@ -68,8 +60,6 @@ class AuthControllerStagiaire extends Controller
         //     ]);
         // }
         else {
-
-
 
             $stagiaire = Stagiaire::create([
                 'name' => $request->name,
@@ -103,10 +93,6 @@ class AuthControllerStagiaire extends Controller
 
             ]);
 
-
-
-
-
             $token = $stagiaire->createToken('auth_token')->plainTextToken;
             return response()->json([
                 'status' => 200,
@@ -120,10 +106,6 @@ class AuthControllerStagiaire extends Controller
         }
     }
 
-
-
-
-
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -136,7 +118,6 @@ class AuthControllerStagiaire extends Controller
                     'validation_errors' => $validator->messages(),
                     'status' => 422,
                 ]
-
             );
         }
 
@@ -206,10 +187,17 @@ class AuthControllerStagiaire extends Controller
         );
     }
 
-
-
-
-
+    public function submit_score (Request $request, $id){
+        $stagiaire = Stagiaire::where('_id', '=', $id)->first();
+        $stagiaire->update($request->all());
+        return response()->json(
+            [
+                'status' => 200,
+                'message' => 'Score ajouté avec succée',
+            ]
+        );
+        
+    }
 
     //modifier profile
     public function update_profile(Request $request)
@@ -264,8 +252,6 @@ class AuthControllerStagiaire extends Controller
     }
 
 
-
-
     //Test (Quiz)
 
     public function identifier(Request $request)
@@ -278,19 +264,22 @@ class AuthControllerStagiaire extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'validation_errors' => $validator->messages(),
+                'validation_errors' => $validator->errors()->first(),
             ]);
         } else {
+
             $etudiant = Stagiaire::create([
                 'email' => $request['email'],
                 'cinoupassport_stagiaire' => $request['cinoupassport_stagiaire'],
                 'niveauetude' => $request['niveauetude'],
             ]);
-            $token = $etudiant->createToken($etudiant->cin . '_Token')->plainTextToken;
+
+            // $token = $etudiant->createToken($etudiant->cin . '_Token')->plainTextToken;
+
             return response()->json([
                 'status' => 200,
-                'cinoupassport_stagiaire' => $etudiant->cinoupassport_stagiaire,
-                'token' => $token,
+                'stagiaire' => $etudiant,
+                // 'token' => $token,
                 'message' => 'bienvenue au test',
             ]);
         }
