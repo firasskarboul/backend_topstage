@@ -76,7 +76,7 @@ Route::get('/afficher-sujets-stages', [SujetStageController::class, 'index']);
 
 //déposer travail / rapport / bilan
 Route::post('/deposer-travail', [TravailController::class, 'store']);
-Route::post('/deposer-rapport', [RapportController::class, 'store']);
+Route::post('/deposer-rapport/{id}', [RapportController::class, 'store']);
 Route::post('/deposer-bilan', [BilanController::class, 'store']);
 //.déposer travail / rapport / bilan
 
@@ -224,18 +224,6 @@ Route::delete('supprimer-departement/{id}', [DepartementController::class, 'dest
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*  Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -261,10 +249,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   Route::post('logout', [AuthController::class, 'logout']);
 });
-
-
-
-
 
 
 

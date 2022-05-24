@@ -10,8 +10,8 @@ use Validator;
 
 class TravailController extends Controller
 {
-   // public function deposer(Request $request){
-      /*   $travail = new Travail;
+  // public function deposer(Request $request){
+  /*   $travail = new Travail;
          if($request->hasFile('tfile')){
              $completeFileName  = $request->file('tfile')->getClientOriginalName();
              $fileNameOnly = pathinfo($completeFileName , PATHINFO_FILENAME);
@@ -32,7 +32,6 @@ class TravailController extends Controller
 
 
 
- 
 
 
 
@@ -40,11 +39,12 @@ class TravailController extends Controller
 
 
 
-       
 
 
-         //$travail = new Travail;
-         /*  if($request->hasFile('tfile')){
+
+
+  //$travail = new Travail;
+  /*  if($request->hasFile('tfile')){
              $file = $request->file('tfile');
              $filename = $file->getClientOriginalName();
              $extension = $file->getClientOriginalExtension();
@@ -52,13 +52,13 @@ class TravailController extends Controller
              $finalName = time(). '_' . $filename ;
              $request->file('tfile')->storeAs('public/Traveaux' , $finalName );
               */
-             //$finalName = date('His') . $filename;
-            // $fileNameOnly = pathinfo($file , PATHINFO_FILENAME);
-             //$finalName = date('His') . $filename;
-             //$extension = $request->file('tfile')->getClientOriginalExtension();
-             //$comPic = str_replace(' ','_',$fileNameOnly).'-'.rand() . '_'.time().$extension;            
-            // $travail->tfile =$comPic;
-           /*   $travail = Travail::create([
+  //$finalName = date('His') . $filename;
+  // $fileNameOnly = pathinfo($file , PATHINFO_FILENAME);
+  //$finalName = date('His') . $filename;
+  //$extension = $request->file('tfile')->getClientOriginalExtension();
+  //$comPic = str_replace(' ','_',$fileNameOnly).'-'.rand() . '_'.time().$extension;            
+  // $travail->tfile =$comPic;
+  /*   $travail = Travail::create([
                'tfile' => 'public/Traveaux/'.$finalName,
                
             ]);
@@ -67,68 +67,63 @@ class TravailController extends Controller
           else{
             return response()->json(["status" => false ,"message" => "vous devez sélectioner un fichier D'abord"]);
           } */
-     
-    //} 
+
+  //} 
 
 
 
-    public function store(Request $request)
-    {
-      $validator = Validator::make($request->all(),[
-       // 'tfile'=>'file|mimes:pdf,docx ',
-         'description'=>'string|max:200 ',
-      
-     ]);
+  public function store(Request $request)
+  {
+    $validator = Validator::make($request->all(), [
+      // 'tfile'=>'file|mimes:pdf,docx ',
+      'description' => 'string|max:200 ',
 
-     if($validator->fails()){
+    ]);
+
+    if ($validator->fails()) {
       return response()->json(
-          [ 'validation_errors' => $validator->messages() ,
-            'status'=>400,
-          ]);   
-       }
+        [
+          'validation_errors' => $validator->messages(),
+          'status' => 400,
+        ]
+      );
+    } else {
+      $travail = new Travail;
 
-       else{    
-         $travail = new Travail;
-         
-          $travail->description =$request->description;
-          
-            if($request->hasFile('tfile')){
-             $file = $request->file('tfile');
-             $filename = $file->getClientOriginalName();
-             $extension = $file->getClientOriginalExtension();
-             
-             $finalName = time(). '_' . $filename ;
-             $request->file('tfile')->storeAs('public/Upload/Traveaux' , $finalName );
-             $travail->tfile='public/Upload/Traveaux/'.$finalName;
-             } 
+      $travail->description = $request->description;
 
-             $travail->save();
+      if ($request->hasFile('tfile')) {
+        $file = $request->file('tfile');
+        $filename = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+
+        $finalName = time() . '_' . $filename;
+        $request->file('tfile')->storeAs('public/Upload/Traveaux', $finalName);
+        $travail->tfile = 'public/Upload/Traveaux/' . $finalName;
+      }
+
+      $travail->save();
 
 
 
-            
-    
 
-              /*  $travail = Travail::create([
+
+
+      /*  $travail = Travail::create([
                   'tfile' => 'public/Traveaux/'.$finalName,
                    'description'=> $request->description,
                   
                    
                 ]); */
-           
-                return response()->json(
-                    ['message' => 'Travail déposé avec succès',
-                    'status'=>200,
-                    'travail' => $travail,
-       
-                    ] );
-       
-               }
 
+      return response()->json(
+        [
+          'message' => 'Travail déposé avec succès',
+          'status' => 200,
+          'travail' => $travail,
 
+        ]
+      );
     }
-
-    
-
-
+  }
 }

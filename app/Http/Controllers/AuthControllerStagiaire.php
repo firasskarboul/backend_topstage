@@ -196,7 +196,6 @@ class AuthControllerStagiaire extends Controller
                 'message' => 'Score ajouté avec succée',
             ]
         );
-        
     }
 
     //modifier profile
