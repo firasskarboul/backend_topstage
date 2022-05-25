@@ -53,13 +53,14 @@ class EventController extends Controller
         ]);
     }
 
-    public function update(Request $request, event $event)
+    public function update(Request $request, $id)
     {
         /*   $event->update([
            'start'=> $request->start,
            'end'=> $request->end,
          ]); 
        */
+        $event = Event::find($id);
 
         $event->update($request->all());
         return response()->json([
